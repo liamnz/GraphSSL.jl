@@ -1,0 +1,13 @@
+name = "GraphSSL"
+uuid = "7272e740-dc23-49e7-b5b3-9f1e8ef517eb"
+authors = ["Liam Smith <liam.c.s@outlook.com>"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
