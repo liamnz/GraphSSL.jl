@@ -33,11 +33,10 @@ end
 # We'll construct a sparse graph by connecting observations based on a proximity
 # metric. The graph will be represented by an 'Adjacency Matrix', which is a
 # symmetric indicator matrix where a 1 indicates that those observations are
-# connected, otherwise 0. If the weighted option is chosen, then instead of 1s
-# and 0s, non-zero values instead represent how 'closely' connected an
-# observation is to another.
+# connected, otherwise 0. Connected observations can then be optionally weighted by
+# some function of their distance to represent how 'closely' connected they are.
 
-function construct_graph(X, k; dist_type = Euclidean(), weighted = false, ϵ = 2)
+function construct_graph(X, k; dist_type = Euclidean(), weighting = nothing)
 
     n = size(X, 1)
 
@@ -70,7 +69,7 @@ function construct_graph(X, k; dist_type = Euclidean(), weighted = false, ϵ = 2
 # observations α and β, when α is in β's nearest neighbourhood OR when β is in
 # α's nearest neighbours then the resulting matrix is symmetric and we have a
 # proper Adjaceny matrix that connects observations in a graph structure. We can
-# achieve this by doing an elementwise OR comparison with the nearest neighbour
+# achieve this by doing an elementwise 'OR' comparison with the nearest neighbour
 # matrix and its tranpose.
     A = NN .| transpose(NN)
 
@@ -79,10 +78,10 @@ function construct_graph(X, k; dist_type = Euclidean(), weighted = false, ϵ = 2
     end
 
     # Use a weighted adjacency matrix?
-    if weighted
-        A_ind = findall(A)
+    if !isnothing(weighting)
+        connected = findall(A)
         W = zeros(n, n)
-        W[A_ind] = radial_basis.(D[A_ind], ϵ)
+        W[connected] = weighting.(D[connected])
         return W
     else 
         return A

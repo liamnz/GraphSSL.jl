@@ -7,18 +7,18 @@ using IterativeSolvers
 using Distributions
 using Random
 
-export predict, generate_crescent_moon
+export predict, radial_basis, generate_crescent_moon
 
 include("utils.jl")
 include("internals.jl")
 include("data-generation.jl")
 
 # Dataframe interface
-function predict(data::AbstractDataFrame, target, features, id = nothing; cmn::Bool = true, k::Integer = 5, dist_type::Union{PreMetric, SemiMetric, Metric} = Euclidean(), weighted::Bool = false, epsilon::Number = 2, exact::Bool = false)
+function predict(data::AbstractDataFrame, target, features, id = nothing; cmn::Bool = true, k::Integer = 5, dist_type::Union{PreMetric, SemiMetric, Metric} = Euclidean(), weighting::Function = x -> radial_basis(x, 2), exact::Bool = false)
 
     X, Y, classes, u = prepare_input_data(data, target, features, id)
 
-    A = construct_graph(X, k; dist_type = dist_type, weighted = weighted, ϵ = epsilon)
+    A = construct_graph(X, k; dist_type = dist_type, weighting = weighting)
 
     Ŷ = solve_harmonic_function(A, Y; exact = exact)
 
@@ -30,7 +30,7 @@ function predict(data::AbstractDataFrame, target, features, id = nothing; cmn::B
 
 end
 
-# Adjacency graph interface
+# Adjacency matrix interface
 function predict(A::AbstractMatrix, target::AbstractVector; id = nothing, cmn = true, exact = false)
 
     classes = unique(target)
