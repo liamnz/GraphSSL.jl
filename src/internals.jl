@@ -171,18 +171,24 @@ function solve_harmonic_function(A, Y; exact = false)
 end
 
 # Prediction -------------------------------------------------------------------
-function predict_class(Y_hat, id, classes; prior = nothing)
+function assign_class(Ŷ, classes; id = nothing, prior = nothing)
 
     preds = DataFrame(
-        id = id,
-        prob_class1 = Y_hat[:, 1],
-        prob_class2 = Y_hat[:, 2],
+        prob_class1 = Ŷ[:, 1],
+        prob_class2 = Ŷ[:, 2],
     )
+
+    if !isnothing(id)
+
+        preds[:, :id] = id
+        select!(preds, [:id, :prob_class1, :prob_class2])
+
+    end
 
     if !isnothing(prior)
 
-        class_mass = sum(Y_hat, dims = 1)
-        Y_cmn = Y_hat .* prior ./ class_mass
+        class_mass = sum(Ŷ, dims = 1)
+        Y_cmn = Ŷ .* prior ./ class_mass
         cmn_pred = Y_cmn .== findmax(Y_cmn, dims = 2)[1]
         preds[!, :cmn_class1] = Y_cmn[:, 1]
         preds[!, :cmn_class2] = Y_cmn[:, 2]
@@ -190,7 +196,8 @@ function predict_class(Y_hat, id, classes; prior = nothing)
 
     else
 
-        preds[!, :pred_class] = ifelse(Y_hat[:, 1], classes[1], classes[2])
+        prob_pred = Ŷ .== findmax(Ŷ, dims = 2)[1]
+        preds[!, :pred_class] = ifelse.(prob_pred[:, 1], classes[1], classes[2])
         
     end
 
