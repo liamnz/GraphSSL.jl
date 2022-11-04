@@ -9,9 +9,9 @@ using Random
 
 export predict, radial_basis, generate_crescent_moon
 
-include("utils.jl")
-include("internals.jl")
 include("data-generation.jl")
+include("weighting-functions.jl")
+include("internals.jl")
 
 # Dataframe interface
 function predict(data::AbstractDataFrame, target, features, id = nothing; cmn::Bool = true, k::Integer = 5, dist_type::Union{PreMetric, SemiMetric, Metric} = Euclidean(), weighting::Function = x -> radial_basis(x, 2), exact::Bool = false)
