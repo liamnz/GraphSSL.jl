@@ -59,12 +59,12 @@ the function has sensible defaults which should be acceptable in most cases.
    will be appended to the returned predictions. If `id = nothing` a row ID will
    be created instead.
  * `cmn`: Should 'Class Mass Normalisation' be used to assign classes to the
-  unlabelled observations? CMN is a heuristic proposed by Zhou which adjusts the
-  class probability estimates by the prior frequency of the classes in the
-  labelled data. In the presence of unbalanced classes, this usually leads to
-  better class predictions than using the naive probability estimates from the
-  initial solution. If the classes are already balanced it has the same effect
-  as using the naive probabilities, so `CMN = True` by default.
+   unlabelled observations? CMN is a heuristic proposed by Zhou which adjusts
+   the class probability estimates by the prior frequency of the classes in the
+   labelled data. In the presence of unbalanced classes, this usually leads to
+   better class predictions than using the naive probability estimates from the
+   initial solution. If the classes are already balanced it has the same effect
+   as using the naive probabilities, so `CMN = True` by default.
  * `k`: The number of neighbours used to construct the sparse graph. A small
    number of neighbours is usually sufficient. As `k` gets larger then
    `dist_type` and `weighting` play more of a role in the solution.
