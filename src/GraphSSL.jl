@@ -28,7 +28,7 @@ either of them are within the other's set of nearest neighbours.
 Then a linear system is constructed from certain labelled and unlabelled
 partitions of the adjacency matrix is solved. This linear system is derived from
 the theory of Gaussian Random Fields and Harmonic Functions as articulated by
-Zhou in his 2005 PhD thesis. 
+Zhou in his 2005 PhD thesis.
 
 The solution to this system can be intrepreted as the probability
 that an unlabelled observation reaches a labelled point of a given class in a
