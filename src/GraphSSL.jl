@@ -30,10 +30,10 @@ partitions of the adjacency matrix is solved. This linear system is derived from
 the theory of Gaussian Random Fields and Harmonic Functions as articulated by
 Zhou in his 2005 PhD thesis.
 
-The solution to this system can be intrepreted as the probability
-that an unlabelled observation reaches a labelled point of a given class in a
-random walk on the graph. The unlabelled observations are then are assigned to
-the class with the higher probability.
+The solution to this system can be intrepreted as the probability that an
+unlabelled observation reaches a labelled point of a given class in a random
+walk on the graph. The unlabelled observations are then assigned to the class
+with the higher probability.
 
 The design of the graph (ie adjancency matrix) has the most influence on the
 quality of the predictions, so this function provides many options to tweak how
@@ -42,44 +42,51 @@ the function has sensible defaults which should be acceptable in most cases.
 
 # Arguments
 
-* `data`: A data-frame which contains a `target` variable of partially labelled
-  observations and `features` which can be used to predict the
-  unlabelled observations. Unlabelled observations in `target` should be
-  represented as `missing` values.
+* `data`: A
+  [DataFrame](https://dataframes.juliadata.org/stable/lib/types/#DataFrames.AbstractDataFrame)
+  which contains a `target` variable of partially labelled observations and
+  `features` which can be used to predict the unlabelled observations.
+  Unlabelled observations in `target` should be represented as `missing` values.
 * `target`: A scalar value for the column in `data` which represents the target
-  variable. This should be a valid data-frame indexing value, usually
-  `AbstractString` or `Symbol`, but there are many flexible options see
-  [DataFrames.jl for more
-  information](https://dataframes.juliadata.org/stable/lib/indexing/).
+  variable. This should be a valid
+  [DataFrame](https://dataframes.juliadata.org/stable/lib/types/#DataFrames.AbstractDataFrame)
+  indexing value, usually `AbstractString` or `Symbol`, but
+  [DataFrame](https://dataframes.juliadata.org/stable/lib/types/#DataFrames.AbstractDataFrame)s
+  have many flexible indexing options; see
+  [DataFrames.jl](https://dataframes.juliadata.org/stable/lib/indexing/) for
+  more information.
 * `features`: A value for the columns in `data` which represent the predictors
-  variables. This should be a valid data-frame indexing value, usually an array
-  of `AbstractString`s or `Symbol`s, but there are many flexible options see
-  [DataFrames.jl for more
-  information](https://dataframes.juliadata.org/stable/lib/indexing/).
+  variables. This should be a valid
+  [DataFrame](https://dataframes.juliadata.org/stable/lib/types/#DataFrames.AbstractDataFrame)
+  indexing value, usually an array of `AbstractString`s or `Symbol`s, but
+  [DataFrame](https://dataframes.juliadata.org/stable/lib/types/#DataFrames.AbstractDataFrame)s
+  have many flexible indexing options; see
+  [DataFrames.jl](https://dataframes.juliadata.org/stable/lib/indexing/) for
+  more information.
 * `id`: The name of a variable used to identify an observation in `data`, this
   will be appended to the returned predictions. If `id = nothing` a row ID will
   be created instead.
 * `cmn`: Should 'Class Mass Normalisation' be used to assign classes to the
-  unlabelled observations? CMN is a heuristic proposed by Zhou which adjusts
-  the class probability estimates by the prior frequency of the classes in the
+  unlabelled observations? CMN is a heuristic proposed by Zhou which adjusts the
+  class probability estimates by the prior frequency of the classes in the
   labelled data. In the presence of unbalanced classes, this usually leads to
   better class predictions than using the naive probability estimates from the
   initial solution. If the classes are already balanced it has the same effect
-  as using the naive probabilities, so `CMN = True` by default.
+  as using the naive probabilities, so `cmn = True` by default.
 * `k`: The number of neighbours used to construct the sparse graph. A small
   number of neighbours is usually sufficient. As `k` gets larger then
   `dist_type` and `weighting` play more of a role in the solution.
 * `dist_type`: The kind of distance measure used to determine whether one
   observation is near another and therefore connected in the graph. `dist_type`
   expects a `PreMetric`, `SemiMetric` or `Metric` type as defined by the
-  [Distances.jl](https://github.com/JuliaStats/Distances.jl) package. Note
-  that, depending on the kind of data one has constructed, Euclidean distance
-  may not always be a good way to characterise the distance between
-  observations, especially in high-dimensional settings.
+  [Distances.jl](https://github.com/JuliaStats/Distances.jl) package. Note that,
+  depending on the kind of data one has constructed, Euclidean distance may not
+  always be a good way to characterise the distance between observations,
+  especially in high-dimensional settings.
 * `weighting`: A function used to transform the distance value provided by
-  `dist_type` and create a *weighted* adjancency matrix for the graph, where
-  the weights represent how 'closely' connected the observations are to each
-  other. A radial basis function is used by default but the user can provide an
+  `dist_type` and create a *weighted* adjancency matrix for the graph, where the
+  weights represent how 'closely' connected the observations are to each other.
+  A radial basis function is used by default but the user can provide an
   arbitrary anonymous function for more exotic weights. Set `weighting =
   nothing` to use an unweighted adjacency matrix, ie 1 means two observations
   are connected, 0 otherwise.
@@ -129,12 +136,13 @@ end
 Use Zhou's Graph-based Semi-Supervised learning algorithm to predict the missing
 labels in a set of partially labelled data.
 
-If the approach for graph construction given by the data-frame interface in
-`predict(data::AbstractDataFrame, ...)` is not flexible enough then the user can
-instead provide a custom Adjacency matrix for the graph and a vector of
-partially labelled data to `predict(A::Matrix, target::AbstractVector; ...)`.
-The linear system for the harmonic function is then solved in the same manner as
-the data-frame interface.
+If the approach for graph construction given by the
+[DataFrame](https://dataframes.juliadata.org/stable/lib/types/#DataFrames.AbstractDataFrame)
+interface in `predict(data::AbstractDataFrame, ...)` is not flexible enough then
+the user can instead provide a custom Adjacency matrix for the graph and a
+vector of partially labelled data to `predict(A::Matrix, target::AbstractVector;
+...)`. The linear system for the harmonic function is then solved in the same
+manner as the data-frame interface.
 
 Note that the Adjacency matrix and target vector must be composed in a coherent
 way, otherwise this function will yield bogus results. Let N be the total number
