@@ -75,7 +75,8 @@ the function has sensible defaults which should be acceptable in most cases.
   as using the naive probabilities, so `cmn = True` by default.
 * `k`: The number of neighbours used to construct the sparse graph. A small
   number of neighbours is usually sufficient. As `k` gets larger then
-  `dist_type` and `weighting` play more of a role in the solution.
+  `dist_type` and `weighting` play more of a role in yielding a sensible
+  solution.
 * `dist_type`: The kind of distance measure used to determine whether one
   observation is near another and therefore connected in the graph. `dist_type`
   expects a `PreMetric`, `SemiMetric` or `Metric` type as defined by the
