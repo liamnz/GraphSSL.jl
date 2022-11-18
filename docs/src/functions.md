@@ -8,7 +8,7 @@ predict
 
 ## Weighting
 ```@docs
-generate_crescent_moon
+radial_basis
 ```
 
 ## Data Generation
